@@ -29,7 +29,17 @@ def dumpclean(obj):
         print obj
 
 session = pymapia.PyMapia("69911E52-1583C8FE-1C998725-04FC0632-4DB32EEE-50D8E7E4-713CE9D8-46BB4FDE")
-o = session.get_place_by_id(9762956)
+district = session.get_place_by_id(9762956)
 
-print o['title']
-print dumpclean(o)
+polyline = ""
+for dot in district['polygon']:
+	if polyline != "":
+		polyline = polyline + ';'
+	polyline = polyline + str(dot['y']) + "," + str(dot['x'])
+
+print polyline
+
+# Print matrix for testing
+for dot in district['polygon']:
+	print '[' + str(dot['y']) + "," + str(dot['x']) + "],"
+

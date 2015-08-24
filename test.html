@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Построение многоугольника по заданным координатам - API Яндекс.Карт v 2.x</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <script src="http://api-maps.yandex.ru/2.0/?load=package.full&lang=ru-RU"
+            type="text/javascript"></script>
+    <script type="text/javascript">
+        // Как только будет загружен API и готов DOM, выполняем инициализацию
+        ymaps.ready(init);
+ 
+        function init () {
+            var myMap = new ymaps.Map("map", {
+                    center: [55.8173424,37.5211],
+                    zoom: 15
+                }),
+                // Создаем многоугольник
+               myPolygon = new ymaps.Polygon([[
+                    // Координаты вершин внешней границы многоугольника.
+        			[55.8194762,37.5184608],
+                    [55.8193677,37.5189757],
+                    [55.8194943,37.5196946],
+                    [55.8195244,37.5201988],
+                    [55.8193677,37.5207353],
+                    [55.8186444,37.523042],
+                    [55.8176197,37.5220656],
+                    [55.817487,37.5218081],
+                    [55.8174388,37.5215507],
+                    [55.8173424,37.5211],
+                    [55.8172761,37.5207782],
+                    [55.8160645,37.519598],
+                    [55.8159801,37.5194693],
+                    [55.815968,37.519244],
+                    [55.8156907,37.5108647],
+                    [55.8171254,37.5106287],
+                    [55.8171736,37.5106823],
+                    [55.8187649,37.5176454],
+                    [55.8188312,37.5179458],
+                    [55.8189397,37.5180745],
+                    [55.8190964,37.5181818]
+                ]]);
+ 
+            myMap.geoObjects               
+                .add(myPolygon);
+        }
+    </script>
+</head>
+ 
+<body>
+<h2>Построение многоугольника по заданным координатам</h2>
+ 
+<div id="map" style="width:800px; height:600px"></div>
+</body>
+ 
+</html>
