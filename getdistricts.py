@@ -50,9 +50,13 @@ for i in args.ids:
 	plist.append(district['polygon'])
 
 if args.testformat :
+	print "["
 	for l in plist:
+		print "[["
 		for dot in l:
 			print "[" + str(dot['y']) + "," + str(dot['x']) + "],"
+		print "]],"
+	print "];"
 
 else:
 	for l in plist:
