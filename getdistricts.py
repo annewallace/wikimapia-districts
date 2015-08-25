@@ -3,8 +3,7 @@
 
 # Get districts from wikimapia, generate lists of coordinates
 
-import sys
-import pymapia
+import argparse, sys, pymapia
 from codecs import getreader, getwriter
 
 
@@ -28,18 +27,39 @@ def dumpclean(obj):
     else:
         print obj
 
+def print_test(o):
+	return 0
+
+def print_lines(o):
+	return 0
+
+
+parser = argparse.ArgumentParser(description='Retrives polygons from wikimapia')
+parser.add_argument('ids', metavar='ID', type=int, nargs='+',
+                   help='IDs of object to retrive')
+parser.add_argument('-t', dest='testformat', action='store_true',
+                   help='print coords for testing in yandex api (default: print lists of coords in specified output format)')
+
+args = parser.parse_args()
+
 session = pymapia.PyMapia("69911E52-1583C8FE-1C998725-04FC0632-4DB32EEE-50D8E7E4-713CE9D8-46BB4FDE")
-district = session.get_place_by_id(9762956)
 
-polyline = ""
-for dot in district['polygon']:
-	if polyline != "":
-		polyline = polyline + ';'
-	polyline = polyline + str(dot['y']) + "," + str(dot['x'])
+plist = []
+for i in args.ids:
+	district = session.get_place_by_id(i)
+	plist.append(district['polygon'])
 
-print polyline
+if args.testformat :
+	for l in plist:
+		for dot in l:
+			print "[" + str(dot['y']) + "," + str(dot['x']) + "],"
 
-# Print matrix for testing
-for dot in district['polygon']:
-	print '[' + str(dot['y']) + "," + str(dot['x']) + "],"
+else:
+	for l in plist:
+		polyline = ""
+		for dot in l:
+			if polyline != "":
+				polyline = polyline + ';'
+			polyline = polyline + str(dot['y']) + "," + str(dot['x'])
 
+	print polyline
