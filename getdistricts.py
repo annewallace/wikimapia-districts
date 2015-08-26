@@ -50,8 +50,20 @@ for i in args.ids:
 	plist.append(district['polygon'])
 
 if args.testformat :
-	# Generate html output for testing
-	print u"""
+    # Calculate center
+    sumx = 0.0
+    sumy = 0.0
+    midx = 0.0
+    midy = 0.0
+    count = 0
+    for l in plist:
+        for dot in l:
+            sumy = sumy + dot['y']
+            sumx = sumx + dot['x']
+            count = count + 1
+    midx = sumx/count
+    midy = sumy/count
+    print u"""
 <html>
 <head>
     <title>Границы районов - API Яндекс.Карт v 2.x</title>
@@ -63,23 +75,25 @@ if args.testformat :
         ymaps.ready(init);
  
         function init () {
-            var myMap = new ymaps.Map("map", {
-                    center: [55.9087852,37.4727774],
-                    zoom: 15
+            var myMap = new ymaps.Map("map", {"""
+
+    print "center: [" + str(midy) + "," + str(midx) + "],"
+
+    print u"""
+                    zoom: 10
                 });
             var coords =
 
 	"""
-
-	print "["
-	for l in plist:
+    print "["
+    for l in plist:
 		print "[["
 		for dot in l:
 			print "[" + str(dot['y']) + "," + str(dot['x']) + "],"
 		print "]],"
-	print "];"
+    print "];"
 
-	print u"""
+    print u"""
             // Создаем многоугольник
                 for (i = 0; i < coords.length; i++) {            
                     myPolygon = new ymaps.Polygon(coords[i]);
@@ -90,20 +104,18 @@ if args.testformat :
 </head>
  
 <body>
-<h2>Построение многоугольника по заданным координатам</h2>
+<h2>Карта с полигонами</h2>
  
 <div id="map" style="width:800px; height:600px"></div>
 </body>
  
-</html>
-	"""
+</html>"""
 
 else:
-	for l in plist:
-		polyline = ""
-		for dot in l:
-			if polyline != "":
-				polyline = polyline + ';'
-			polyline = polyline + str(dot['y']) + "," + str(dot['x'])
-
-	print polyline
+    for l in plist:
+        polyline = ""
+        for dot in l:
+            if polyline != "":
+                polyline = polyline + ';'
+            polyline = polyline + str(dot['y']) + "," + str(dot['x'])
+        print polyline
