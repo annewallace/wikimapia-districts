@@ -38,7 +38,7 @@ parser = argparse.ArgumentParser(description='Retrives polygons from wikimapia')
 parser.add_argument('ids', metavar='ID', type=int, nargs='+',
                    help='IDs of object to retrive')
 parser.add_argument('-t', dest='testformat', action='store_true',
-                   help='print coords for testing in yandex api (default: print lists of coords in specified output format)')
+                   help='make html code to test with yandex api (default: print lists of coords in specified output format)')
 
 args = parser.parse_args()
 
@@ -50,6 +50,27 @@ for i in args.ids:
 	plist.append(district['polygon'])
 
 if args.testformat :
+	# Generate html output for testing
+	print u"""
+<html>
+<head>
+    <title>Границы районов - API Яндекс.Карт v 2.x</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <script src="http://api-maps.yandex.ru/2.0/?load=package.full&lang=ru-RU"
+            type="text/javascript"></script>
+    <script type="text/javascript">
+        // Как только будет загружен API и готов DOM, выполняем инициализацию
+        ymaps.ready(init);
+ 
+        function init () {
+            var myMap = new ymaps.Map("map", {
+                    center: [55.9087852,37.4727774],
+                    zoom: 15
+                });
+            var coords =
+
+	"""
+
 	print "["
 	for l in plist:
 		print "[["
@@ -57,6 +78,25 @@ if args.testformat :
 			print "[" + str(dot['y']) + "," + str(dot['x']) + "],"
 		print "]],"
 	print "];"
+
+	print u"""
+            // Создаем многоугольник
+                for (i = 0; i < coords.length; i++) {            
+                    myPolygon = new ymaps.Polygon(coords[i]);
+                    myMap.geoObjects.add(myPolygon);
+                }
+            }
+    </script>
+</head>
+ 
+<body>
+<h2>Построение многоугольника по заданным координатам</h2>
+ 
+<div id="map" style="width:800px; height:600px"></div>
+</body>
+ 
+</html>
+	"""
 
 else:
 	for l in plist:
