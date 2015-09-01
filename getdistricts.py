@@ -63,7 +63,7 @@ if args.testformat :
             count = count + 1
     midx = sumx/count
     midy = sumy/count
-    print u"""
+    print u"""<!DOCTYPE html>
 <html>
 <head>
     <title>Границы районов - API Яндекс.Карт v 2.x</title>
